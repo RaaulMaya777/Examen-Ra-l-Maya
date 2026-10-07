@@ -1,0 +1,141 @@
+#include "raylib.h"
+#include <math.h>
+
+int main(void)
+{
+    const int screenWidth = 800;
+    const int screenHeight = 500;
+
+    InitWindow(
+        screenWidth,
+        screenHeight,
+        "Rotacion de una figura"
+    );
+
+    SetTargetFPS(120);
+
+    // Centro de la ventana
+    Vector2 centro = {
+        screenWidth / 2.0f,
+        screenHeight / 2.0f
+    };
+
+    float triangleSize = 150.0f;
+    float rotation = 0.0f;
+    float rotationSpeed = 120.0f;
+
+    Color colors[4] = {
+        SKYBLUE,
+        LIME,
+        MAROON,
+        MAGENTA
+    };
+
+    int currentColor = 0;
+
+    while (!WindowShouldClose())
+    {
+        float deltaTime = GetFrameTime();
+
+        // El triangulo permanece en el centro y gira
+        rotation += rotationSpeed * deltaTime;
+
+        if (rotation >= 360.0f)
+        {
+            rotation -= 360.0f;
+            currentColor++;
+
+            if (currentColor > 3)
+            {
+                currentColor = 0;
+            }
+        }
+
+        // Convertir el angulo de grados a radianes
+        float angle = rotation * PI / 180.0f;
+
+        // Puntos del triangulo antes de girar
+        Vector2 puntoSuperiorOriginal = {
+            0.0f,
+            -triangleSize / 2.0f
+        };
+
+        Vector2 puntoInferiorIzquierdoOriginal = {
+            -triangleSize / 2.0f,
+            triangleSize / 2.0f
+        };
+
+        Vector2 puntoInferiorDerechoOriginal = {
+            triangleSize / 2.0f,
+            triangleSize / 2.0f
+        };
+
+        // Punto superior girado
+        Vector2 puntoSuperior = {
+            centro.x +
+                puntoSuperiorOriginal.x * cosf(angle) -
+                puntoSuperiorOriginal.y * sinf(angle),
+
+            centro.y +
+                puntoSuperiorOriginal.x * sinf(angle) +
+                puntoSuperiorOriginal.y * cosf(angle)
+        };
+
+        // Punto inferior izquierdo girado
+        Vector2 puntoInferiorIzquierdo = {
+            centro.x +
+                puntoInferiorIzquierdoOriginal.x * cosf(angle) -
+                puntoInferiorIzquierdoOriginal.y * sinf(angle),
+
+            centro.y +
+                puntoInferiorIzquierdoOriginal.x * sinf(angle) +
+                puntoInferiorIzquierdoOriginal.y * cosf(angle)
+        };
+
+        // Punto inferior derecho girado
+        Vector2 puntoInferiorDerecho = {
+            centro.x +
+                puntoInferiorDerechoOriginal.x * cosf(angle) -
+                puntoInferiorDerechoOriginal.y * sinf(angle),
+
+            centro.y +
+                puntoInferiorDerechoOriginal.x * sinf(angle) +
+                puntoInferiorDerechoOriginal.y * cosf(angle)
+        };
+
+        BeginDrawing();
+
+        ClearBackground(WHITE);
+
+        DrawText(
+            "Triangulo girando ",
+            245,
+            30,
+            25,
+            BLACK
+        );
+
+        DrawTriangle(
+            puntoSuperior,
+            puntoInferiorIzquierdo,
+            puntoInferiorDerecho,
+            colors[currentColor]
+        );
+
+        DrawTriangleLines(
+            puntoSuperior,
+            puntoInferiorIzquierdo,
+            puntoInferiorDerecho,
+            BLACK
+        );
+
+        // Marca el centro de rotacion
+        DrawCircleV(centro, 4.0f, RED);
+
+        EndDrawing();
+    }
+
+    CloseWindow();
+
+    return 0;
+}
