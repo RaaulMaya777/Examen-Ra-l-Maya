@@ -1,0 +1,124 @@
+#include "raylib.h"
+
+int main(void) {
+    const int screenWidth = 800;
+    const int screenHeight = 500;
+
+    InitWindow(screenWidth, screenHeight, "Triangulo escalado");
+    SetTargetFPS(120);
+
+    float trianglePosX = 350;
+    float trianglePosY = 0;
+
+    float triangleSize = 100;
+    float triangleMinSize = 50;
+    float triangleMaxSize = 100;
+
+    float triangleSpeedX = 0.0f;
+    float triangleSpeedY = 150.0f;
+
+    float sizeSpeed = 40.0f;
+    float sizeDirection = -1.0f;
+
+    Color colors[4] = {
+        SKYBLUE,
+        LIME,
+        MAROON,
+        MAGENTA
+    };
+
+    int currentColor = 0;
+
+    while (!WindowShouldClose())
+    {
+        float deltaTime = GetFrameTime();
+
+        // Traslacion vertical
+        trianglePosX += triangleSpeedX * deltaTime;
+        trianglePosY += triangleSpeedY * deltaTime;
+
+        // Cambio de tamaño
+        triangleSize += sizeDirection * sizeSpeed * deltaTime;
+
+        if (triangleSize <= triangleMinSize)
+        {
+            triangleSize = triangleMinSize;
+            sizeDirection = 1.0f;
+        }
+
+        if (triangleSize >= triangleMaxSize)
+        {
+            triangleSize = triangleMaxSize;
+            sizeDirection = -1.0f;
+        }
+
+        // Rebote en la parte inferior
+        if (trianglePosY >= screenHeight - triangleSize)
+        {
+            trianglePosY = screenHeight - triangleSize;
+            triangleSpeedY *= -1;
+            currentColor++;
+        }
+        // Rebote en la parte superior
+        else if (trianglePosY <= 0.0f)
+        {
+            trianglePosY = 0.0f;
+            triangleSpeedY *= -1;
+            currentColor++;
+        }
+
+        // Reiniciar los colores
+        if (currentColor > 3)
+        {
+            currentColor = 0;
+        }
+
+        // Puntos del triangulo
+        Vector2 puntoSuperior = {
+            trianglePosX + triangleSize / 2.0f,
+            trianglePosY
+        };
+
+        Vector2 puntoInferiorIzquierdo = {
+            trianglePosX,
+            trianglePosY + triangleSize
+        };
+
+        Vector2 puntoInferiorDerecho = {
+            trianglePosX + triangleSize,
+            trianglePosY + triangleSize
+        };
+
+        BeginDrawing();
+
+        ClearBackground(WHITE);
+
+        DrawText(
+            "Triangulo con traslacion y escalacion",
+            220,
+            25,
+            25,
+            BLACK
+        );
+
+        DrawTriangle(
+            puntoSuperior,
+            puntoInferiorIzquierdo,
+            puntoInferiorDerecho,
+            colors[currentColor]
+        );
+
+        DrawTriangleLines(
+            puntoSuperior,
+            puntoInferiorIzquierdo,
+            puntoInferiorDerecho,
+            BLACK
+        );
+
+        EndDrawing();
+    }
+
+    CloseWindow();
+
+    return 0;
+}
