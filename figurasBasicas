@@ -1,0 +1,136 @@
+#include "raylib.h"
+
+int main(void)
+{
+    const int screenWidth = 800;
+    const int screenHeight = 500;
+
+    InitWindow(
+        screenWidth,
+        screenHeight,
+        "Figuras geometricas basicas"
+    );
+
+    SetTargetFPS(120);
+
+    while (!WindowShouldClose())
+    {
+        BeginDrawing();
+
+        ClearBackground(RAYWHITE);
+
+        DrawText(
+            "Figuras geometricas basicas",
+            235,
+            30,
+            25,
+            DARKGRAY
+        );
+
+        // Cuadrado
+        DrawRectangle(
+            70,
+            150,
+            120,
+            120,
+            SKYBLUE
+        );
+
+        DrawRectangleLines(
+            70,
+            150,
+            120,
+            120,
+            DARKBLUE
+        );
+
+        DrawText(
+            "Cuadrado",
+            85,
+            290,
+            20,
+            DARKBLUE
+        );
+
+        // Triangulo
+        Vector2 puntoSuperior = { 400, 140 };
+        Vector2 puntoInferiorDerecho = { 480, 280 };
+        Vector2 puntoInferiorIzquierdo = { 320, 280 };
+
+        DrawTriangle(
+            puntoSuperior,
+            puntoInferiorDerecho,
+            puntoInferiorIzquierdo,
+            ORANGE
+        );
+
+        DrawTriangleLines(
+            puntoSuperior,
+            puntoInferiorDerecho,
+            puntoInferiorIzquierdo,
+            BLACK
+        );
+
+        DrawText(
+            "Triangulo",
+            350,
+            300,
+            20,
+            BLACK
+        );
+
+        // Circulo
+        DrawCircle(
+            620,
+            210,
+            60,
+            MAROON
+        );
+
+        DrawCircleLines(
+            620,
+            210,
+            60,
+            RED
+        );
+
+        DrawText(
+            "Circulo",
+            585,
+            290,
+            20,
+            MAROON
+        );
+
+        // Rectangulo
+        DrawRectangle(
+            100,
+            370,
+            220,
+            70,
+            MAGENTA
+        );
+
+        DrawRectangleLines(
+            100,
+            370,
+            220,
+            70,
+            PURPLE
+        );
+
+        DrawText(
+            "Rectangulo",
+            155,
+            450,
+            20,
+            PURPLE
+        );
+
+        EndDrawing();
+    }
+
+    CloseWindow();
+
+    return 0;
+}
